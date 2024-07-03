@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,12 +38,20 @@ class MainActivity : ComponentActivity() {
 
                     val viewModel = hiltViewModel<MainViewModel>()
                     val scope = rememberCoroutineScope()
-                    scope.launch {
-                        viewModel.getQuestions()
-                    }
 
-                    Text(text = viewModel.questions?.listOfQuestions?.get(0)?.askQuestion.toString()
-                    )
+
+                    Column{
+                        Button(onClick = {
+                            scope.launch {
+                                viewModel.getQuestions()
+                            }
+                        }) {
+
+                        }
+                        Text(
+                            text = viewModel.questions?.listOfQuestions?.get(0)?.askQuestion.toString()
+                        )
+                    }
                 }
             }
         }
