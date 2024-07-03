@@ -1,5 +1,6 @@
 package com.example.quizgame.di
 
+import com.example.quizgame.Repository
 import com.example.quizgame.api.QuestionsApi
 import dagger.Module
 import dagger.Provides
@@ -15,13 +16,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class MainModule() {
 
+
+
+
     @Provides
     @Singleton
-    fun provideQuestionsApi(): QuestionsApi {
+    fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(QuestionsApi.BASE_URL)
             .build()
-            .create()
     }
+
+
+    @Provides
+    @Singleton
+    fun provideQuestionsApi(retrofit: Retrofit): QuestionsApi {
+        return retrofit.create(QuestionsApi::class.java)
+    }
+
 }
