@@ -15,22 +15,27 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.quizgame.ui.theme.QuizGameTheme
+import com.example.quizgame.domain.model.Questions
+import com.example.quizgame.shuffleAnswers
 
 const val MAX_QUESTIONS = 10
 
 @Composable
 fun QuestionScreen(
-    modifier: Modifier = Modifier,
-    questionNumber: Int,
-    question: String,
-    possibleAnswers: List<String>
+    questions: Questions,
+    questionId: String
 ) {
+    val question by remember { mutableStateOf(questions.getCurrentQuestion(questionId)) }
+    val possibleAnswers by remember {
+        mutableStateOf(shuffleAnswers(question.correctAnswer, question.wrongAnswers))
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -42,12 +47,12 @@ fun QuestionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(
-                    text = "Question $questionNumber/$MAX_QUESTIONS",
+                    text = "Question ${question.questionNumber}/$MAX_QUESTIONS",
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(10.dp)
                 )
                 Text(
-                    text = question,
+                    text = question.askQuestion,
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 40.dp)
                 )
@@ -58,14 +63,14 @@ fun QuestionScreen(
         Spacer(modifier = Modifier.height(100.dp))
 
         Column(
-            modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
             (1..4).forEach { itemNumber ->
                 OptionItem(
-                    itemNumber = itemNumber.toString()+".",
-                    optionString = possibleAnswers[itemNumber - 1]
+                    answerNumber = itemNumber.toString()+".",
+                    possibleAnswer = possibleAnswers[itemNumber - 1]
                 )
             }
         }
@@ -78,9 +83,8 @@ fun QuestionScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OptionItem(
-    modifier: Modifier = Modifier,
-    itemNumber: String,
-    optionString: String
+    answerNumber: String,
+    possibleAnswer: String
 ) {
     OutlinedCard(
         elevation = CardDefaults.cardElevation(
@@ -94,12 +98,12 @@ fun OptionItem(
     ) {
         Row {
             Text(
-                text = itemNumber,
+                text = answerNumber,
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier.padding(all = 4.dp)
             )
             Text(
-                text = optionString,
+                text = possibleAnswer,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(all = 8.dp)
             )
@@ -108,19 +112,3 @@ fun OptionItem(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun QuestionScreenPreview(modifier: Modifier = Modifier) {
-    QuizGameTheme {
-        QuestionScreen(
-            questionNumber = 1,
-            question = "What color is the warmest color?",
-            possibleAnswers = listOf(
-                "Red",
-                "Blue",
-                "Yellow",
-                "I'm colorblind, how dare you! 23423$#@#"
-            )
-        )
-    }
-}

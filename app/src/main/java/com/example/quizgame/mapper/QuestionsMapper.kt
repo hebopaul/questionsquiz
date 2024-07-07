@@ -8,13 +8,13 @@ import com.example.quizgame.dto.SingleQuestionDto
 
 
 fun QuestionsDto.toQuestions() = Questions(
-    listOfQuestions = this.questions.map { it.toSingleQuestion() }
+    list = this.questions.mapIndexed { index, it -> it.toSingleQuestion(index+1) }
 )
 
 
-fun SingleQuestionDto.toSingleQuestion() = SingleQuestion(
+fun SingleQuestionDto.toSingleQuestion(questionNumber: Int) = SingleQuestion(
     askQuestion = this.question,
     correctAnswer = this.correctAnswer,
-    wrongAnswers = this.incorrectAnswers
-
+    wrongAnswers = this.incorrectAnswers,
+    questionNumber = questionNumber
 )

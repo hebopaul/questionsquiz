@@ -1,6 +1,5 @@
 package com.example.quizgame.presentation
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,15 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.quizgame.R
-import com.example.quizgame.ui.theme.QuizGameTheme
 
 
 @Composable
 fun TitleScreen(
-    modifier: Modifier = Modifier
+    onNewGameClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -38,7 +35,7 @@ fun TitleScreen(
         )
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onNewGameClick() },
             modifier = Modifier.size(height = 100.dp, width = 300.dp)
         ) {
             Text(
@@ -51,19 +48,4 @@ fun TitleScreen(
     }
 }
 
-@Preview
-@Composable
-fun TitleScreenPreview(modifier: Modifier = Modifier) {
-    QuizGameTheme {
-        TitleScreen()
-    }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun TitleScreenDarkPreview(modifier: Modifier = Modifier) {
-    QuizGameTheme {
-        TitleScreen()
-    }
-}
 
