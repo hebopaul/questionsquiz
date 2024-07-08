@@ -35,31 +35,29 @@ class MainViewModel @Inject constructor(
 
 
     fun newGame(){
-        getQuestions()
-        score = 0
-        questionNumber = 1
-        currentQuestion = questions?.list?.get(0)
-        if (currentQuestion == null) { Log.d("MainViewModel", "No questions") }
+        viewModelScope.launch{
+            questions = repository.getQuestions()
+            println("questions retrieved")
+            score = 0
+            questionNumber = 1
+            currentQuestion = questions?.list?.get(0)
+            println("First question is: ${currentQuestion?.questionId}")
+            if (currentQuestion == null) { Log.d("MainViewModel", "No questions") }
+        }
     }
 
-    fun giveAnswer(answer: String) { isAnswerCorrect(answer) }
-    private fun getQuestions() {
-        viewModelScope.launch{ questions = repository.getQuestions() }
-    }
-    fun isAnswerCorrect(answer: String) {
-        isAnswerCorrect = currentQuestion?.correctAnswer == answer
-        if (isAnswerCorrect == true) {
-            score += 10
-        }
+    fun answeredCorrectly() {
+        score += 10
         nextQuestion()
-        isAnswerCorrect = null
+    }
+
+    fun answeredIncorrectly() {
+        nextQuestion()
     }
 
 
     private fun nextQuestion() {
         viewModelScope.launch{
-            delay(2000)
-
             if (questionNumber == questions?.list?.size){
                 gameOver()
                 return@launch

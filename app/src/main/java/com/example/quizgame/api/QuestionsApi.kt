@@ -8,7 +8,8 @@ interface QuestionsApi {
 
     @GET(END_POINT)
     suspend fun getQuestions(
-        @Query("amount") numberOfQuestions: Int = 10
+        @Query("amount") numberOfQuestions: Int = 10,
+        @Query("type") type: String = "multiple"
     ): QuestionsDto
 
 

@@ -1,16 +1,21 @@
 package com.example.quizgame.presentation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quizgame.MainViewModel
 import com.example.quizgame.getApprovalMessage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun Navigation(viewModel: MainViewModel) {
 
     val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
     NavHost(
         navController = navController,
         startDestination = Route.TitleScreen.route
@@ -19,29 +24,56 @@ fun Navigation(viewModel: MainViewModel) {
             TitleScreen(
                 onNewGameClick = {
                     viewModel.newGame()
-                    navController.navigate(
-                        "question_screen" + "/" + viewModel.currentQuestion?.questionId
-                    )
+                    scope.launch {
+                        delay(2000)
+                        navController.navigate(
+                            "question_screen/" + viewModel.currentQuestion?.questionId
+                        )
+                    }
                 }
             )
         }
 
         composable(route = Route.QuestionScreen.route) {
             val questionId = it.arguments?.getString("questionId")
+            Log.d("Navigation", "questionId: $questionId")
             if (viewModel.questions == null)
             {
                 LoadingScreen()
             }
+            if (viewModel.isGameOver)
+                navController.navigate("game_over_screen/"+viewModel.score)
             else {
                 QuestionScreen(
                     questions = viewModel.questions!!,
-                    questionId = questionId ?: "0"
+                    questionId = questionId ?: "0",
+                    onAnswerWrong = {
+                        viewModel.answeredIncorrectly()
+                        Log.d("Navigation", "onAnswerWrong")
+                        scope.launch{
+                            delay(1500)
+                            navController.navigate(
+                                "question_screen/" + viewModel.currentQuestion?.questionId
+                            )
+                        }
+                    },
+                    onAnswerCorrect = {
+                        viewModel.answeredCorrectly()
+                        Log.d("Navigation", "onAnswerCorrect")
+                        scope.launch{
+                            delay(1500)
+                            navController.navigate(
+                                "question_screen/" + viewModel.currentQuestion?.questionId
+                            )
+                        }
+                    },
                 )
             }
         }
 
         composable(route = Route.GameOverScreen.route) {
             val score = it.arguments?.getString("score")?.toInt()
+            Log.d("Navigation", "score: $score")
             GameOverScreen(
                 score = score ?: 0,
                 message = getApprovalMessage(score = score!!, maxScore = MAX_QUESTIONS * 10),
@@ -49,7 +81,7 @@ fun Navigation(viewModel: MainViewModel) {
                 onPlayAgain = {
                     viewModel.playAgain()
                     navController.navigate(
-                        "question_screen" + "/" + viewModel.currentQuestion?.questionId
+                        "question_screen/" + viewModel.currentQuestion?.questionId
                     )
                 }
             )
@@ -63,6 +95,7 @@ fun Navigation(viewModel: MainViewModel) {
 sealed class Route(val route: String) {
     object TitleScreen : Route("title_screen")
     object QuestionScreen : Route("question_screen/{questionId}")
-    object GameOverScreen : Route("game_over_screen{score}")
+    object GameOverScreen : Route("game_over_screen/{score}")
 
 }
+

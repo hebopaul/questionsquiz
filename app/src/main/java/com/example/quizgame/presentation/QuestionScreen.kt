@@ -1,5 +1,6 @@
 package com.example.quizgame.presentation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +33,9 @@ const val MAX_QUESTIONS = 10
 @Composable
 fun QuestionScreen(
     questions: Questions,
-    questionId: String
+    questionId: String,
+    onAnswerCorrect: () -> Unit,
+    onAnswerWrong: () -> Unit
 ) {
     val question by remember { mutableStateOf(questions.getCurrentQuestion(questionId)) }
     val possibleAnswers by remember {
@@ -41,11 +46,11 @@ fun QuestionScreen(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Surface(modifier = Modifier.height(200.dp), color = Color.LightGray){
+        Surface(modifier = Modifier.height(200.dp), color = Color.LightGray) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(
                     text = "Question ${question.questionNumber}/$MAX_QUESTIONS",
                     style = MaterialTheme.typography.headlineMedium,
@@ -54,7 +59,7 @@ fun QuestionScreen(
                 Text(
                     text = question.askQuestion,
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 40.dp)
+                    modifier = Modifier.padding(bottom = 40.dp, start = 10.dp)
                 )
             }
         }
@@ -68,9 +73,25 @@ fun QuestionScreen(
             verticalArrangement = Arrangement.Center
         ) {
             (1..4).forEach { itemNumber ->
+                val isCorrect = possibleAnswers[itemNumber - 1] == question.correctAnswer
+                var isChosen by remember { mutableStateOf(false) }
                 OptionItem(
-                    answerNumber = itemNumber.toString()+".",
-                    possibleAnswer = possibleAnswers[itemNumber - 1]
+                    answerNumber = "$itemNumber.",
+                    possibleAnswer = possibleAnswers[itemNumber - 1],
+                    onClick = {
+                              isChosen = true
+                            if (isCorrect) onAnswerCorrect()
+                            else onAnswerWrong()
+                    },
+                    colorState = if (isCorrect && isChosen) CardDefaults.outlinedCardColors(
+                        containerColor = Color.Green,
+                        contentColor = Color.White
+                    )
+                    else if (!isCorrect && isChosen) CardDefaults.outlinedCardColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    )
+                    else CardDefaults.elevatedCardColors()
                 )
             }
         }
@@ -84,14 +105,20 @@ fun QuestionScreen(
 @Composable
 fun OptionItem(
     answerNumber: String,
-    possibleAnswer: String
+    possibleAnswer: String,
+    onClick: () -> Unit,
+    colorState: CardColors,
 ) {
     OutlinedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp,
             pressedElevation = 2.dp
         ),
-        onClick = {},
+        onClick = {
+            onClick()
+            Log.d("QUESTION SCREEN", "OptionItem: $possibleAnswer clicked")
+                  },
+        colors = colorState,
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .fillMaxWidth()
@@ -110,5 +137,6 @@ fun OptionItem(
         }
     }
 }
+
 
 

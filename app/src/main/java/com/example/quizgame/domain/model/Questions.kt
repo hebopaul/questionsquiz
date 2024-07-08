@@ -5,13 +5,14 @@ data class Questions(
 ) {
 
     fun getCurrentQuestion(questionId: String): SingleQuestion {
-        list?.forEachIndexed { index, question ->
+        list?.forEach { question ->
             if (question.questionId == questionId)
                 return SingleQuestion(
                     askQuestion = question.askQuestion,
                     correctAnswer = question.correctAnswer,
                     wrongAnswers = question.wrongAnswers,
-                    questionNumber = index+1
+                    questionNumber = question.questionNumber,
+                    questionId = question.questionId
                 )
         }
         return SingleQuestion(

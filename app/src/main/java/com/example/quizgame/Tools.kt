@@ -4,6 +4,7 @@ fun shuffleAnswers(
     rightAnswer: String,
     wrongAnswers: List<String>
 ): List<String> {
+    if (wrongAnswers.size != 3) throw IllegalArgumentException("Wrong answers must be 3")
     val list = wrongAnswers+rightAnswer
     return list.shuffled()
 }
@@ -13,7 +14,7 @@ fun getApprovalMessage(score: Int, maxScore: Int): String {
     val scorePercentage = (score.toDouble() / maxScore)
     return when {
         scorePercentage == 1.0 -> "Congratulations! You are a genius wizard!"
-        scorePercentage >= 0.9 -> "You are even smarter than super original app!"
+        scorePercentage >= 0.9 -> "You are even smarter than this super original app!"
         scorePercentage >= 0.8 -> "You docto yet? Talk to me after you docto!"
         scorePercentage >= 0.7 -> "Wow, you be the very smart!"
         scorePercentage >= 0.5 -> "Good job! I've seen better..."
