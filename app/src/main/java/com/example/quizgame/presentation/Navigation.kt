@@ -2,6 +2,7 @@ package com.example.quizgame.presentation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,38 +38,43 @@ fun Navigation(viewModel: MainViewModel) {
         composable(route = Route.QuestionScreen.route) {
             val questionId = it.arguments?.getString("questionId")
             Log.d("Navigation", "questionId: $questionId")
-            if (viewModel.questions == null)
-            {
+
+            LaunchedEffect(key1 = viewModel.isGameOver) {
+                if (viewModel.isGameOver){
+                    navController.navigate(
+                        "game_over_screen/" + viewModel.score
+                    )
+                }
+            }
+
+            if (viewModel.questions == null) {
                 LoadingScreen()
-            }
-            if (viewModel.isGameOver)
-                navController.navigate("game_over_screen/"+viewModel.score)
-            else {
-                QuestionScreen(
-                    questions = viewModel.questions!!,
-                    questionId = questionId ?: "0",
-                    onAnswerWrong = {
-                        viewModel.answeredIncorrectly()
-                        Log.d("Navigation", "onAnswerWrong")
-                        scope.launch{
-                            delay(1500)
-                            navController.navigate(
-                                "question_screen/" + viewModel.currentQuestion?.questionId
-                            )
-                        }
-                    },
-                    onAnswerCorrect = {
-                        viewModel.answeredCorrectly()
-                        Log.d("Navigation", "onAnswerCorrect")
-                        scope.launch{
-                            delay(1500)
-                            navController.navigate(
-                                "question_screen/" + viewModel.currentQuestion?.questionId
-                            )
-                        }
-                    },
-                )
-            }
+            } else
+            QuestionScreen(
+                questions = viewModel.questions!!,
+                questionId = questionId ?: "0",
+                onAnswerWrong = {
+                    viewModel.answeredIncorrectly()
+                    Log.d("Navigation", "onAnswerWrong")
+                    scope.launch{
+                        delay(1500)
+                        navController.navigate(
+                            "question_screen/" + viewModel.currentQuestion?.questionId
+                        )
+                    }
+                },
+                onAnswerCorrect = {
+                    viewModel.answeredCorrectly()
+                    Log.d("Navigation", "onAnswerCorrect")
+                    scope.launch{
+                        delay(1500)
+                        navController.navigate(
+                            "question_screen/" + viewModel.currentQuestion?.questionId
+                        )
+                    }
+                },
+            )
+
         }
 
         composable(route = Route.GameOverScreen.route) {
@@ -79,16 +85,17 @@ fun Navigation(viewModel: MainViewModel) {
                 message = getApprovalMessage(score = score!!, maxScore = MAX_QUESTIONS * 10),
                 onHome = { navController.navigate(Route.TitleScreen.route) },
                 onPlayAgain = {
-                    viewModel.playAgain()
-                    navController.navigate(
-                        "question_screen/" + viewModel.currentQuestion?.questionId
-                    )
+                    scope.launch{
+                        viewModel.playAgain()
+                        delay(500)
+                        navController.navigate(
+                            "question_screen/" + viewModel.currentQuestion?.questionId
+                        )
+                    }
                 }
             )
         }
-
     }
-
 }
 
 

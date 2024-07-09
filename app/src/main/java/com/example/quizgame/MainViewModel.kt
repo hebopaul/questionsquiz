@@ -11,7 +11,6 @@ import com.example.quizgame.domain.model.Questions
 import com.example.quizgame.domain.model.SingleQuestion
 import com.example.quizgame.presentation.MAX_QUESTIONS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -57,14 +56,12 @@ class MainViewModel @Inject constructor(
 
 
     private fun nextQuestion() {
-        viewModelScope.launch{
-            if (questionNumber == questions?.list?.size){
-                gameOver()
-                return@launch
-            }
-            questionNumber ++
-            currentQuestion = questions?.list?.get(questionNumber - 1)
+        if (questionNumber == questions?.list?.size){
+            gameOver()
+            return
         }
+        questionNumber ++
+        currentQuestion = questions?.list?.get(questionNumber - 1)
     }
 
     private fun gameOver() {
@@ -73,11 +70,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun playAgain() {
-        newGame()
         isGameOver = false
+        newGame()
     }
 
-    fun getEndingMessage(): String {
+    fun getScoreMessage(): String {
        return getApprovalMessage(score, MAX_QUESTIONS*10)
     }
 

@@ -23,6 +23,5 @@ fun getApprovalMessage(score: Int, maxScore: Int): String {
         scorePercentage >= 0.2 -> "You need to work hard!"
         scorePercentage >= 0.1 -> "Congratulations! You have failed successfully!"
         else -> "Congratulations! You are demoted to a monkey's assistant!"
-
     }
 }

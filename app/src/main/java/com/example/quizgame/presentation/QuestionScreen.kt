@@ -1,5 +1,6 @@
 package com.example.quizgame.presentation
 
+import android.text.Html
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +19,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,11 +42,15 @@ fun QuestionScreen(
 ) {
     val question by remember { mutableStateOf(questions.getCurrentQuestion(questionId)) }
     val possibleAnswers by remember {
-        mutableStateOf(shuffleAnswers(question.correctAnswer, question.wrongAnswers))
+        derivedStateOf { shuffleAnswers(question.correctAnswer, question.wrongAnswers) }
     }
 
+
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(modifier = Modifier.height(200.dp), color = Color.LightGray) {
@@ -57,7 +64,7 @@ fun QuestionScreen(
                     modifier = Modifier.padding(10.dp)
                 )
                 Text(
-                    text = question.askQuestion,
+                    text = Html.fromHtml(question.askQuestion).toString(),
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 40.dp, start = 10.dp)
                 )
@@ -79,9 +86,9 @@ fun QuestionScreen(
                     answerNumber = "$itemNumber.",
                     possibleAnswer = possibleAnswers[itemNumber - 1],
                     onClick = {
-                              isChosen = true
-                            if (isCorrect) onAnswerCorrect()
-                            else onAnswerWrong()
+                        isChosen = true
+                        if (isCorrect) onAnswerCorrect()
+                        else onAnswerWrong()
                     },
                     colorState = if (isCorrect && isChosen) CardDefaults.outlinedCardColors(
                         containerColor = Color.Green,
@@ -117,7 +124,7 @@ fun OptionItem(
         onClick = {
             onClick()
             Log.d("QUESTION SCREEN", "OptionItem: $possibleAnswer clicked")
-                  },
+        },
         colors = colorState,
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 5.dp)
@@ -130,7 +137,7 @@ fun OptionItem(
                 modifier = Modifier.padding(all = 4.dp)
             )
             Text(
-                text = possibleAnswer,
+                text = Html.fromHtml(possibleAnswer).toString(),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(all = 8.dp)
             )
