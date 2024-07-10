@@ -52,7 +52,7 @@ fun GameOverScreen(
         Spacer(modifier = Modifier.height(200.dp))
         Text(
             modifier = Modifier.padding(30.dp),
-            text = "Your score is $score",
+            text = stringResource(R.string.your_score_is)+": $score",
             style = MaterialTheme.typography.headlineMedium
         )
         Spacer(modifier = Modifier.height(50.dp))
@@ -110,7 +110,7 @@ fun GameOverScreenPreview() {
     QuizGameTheme {
         GameOverScreen(
             score = 10,
-            message = "Congratulations! You have Failed successfully!",
+            message = "",
             onPlayAgain = {},
             onHome = {}
         )

@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.quizgame.MainViewModel
-import com.example.quizgame.getApprovalMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -82,7 +81,7 @@ fun Navigation(viewModel: MainViewModel) {
             Log.d("Navigation", "score: $score")
             GameOverScreen(
                 score = score ?: 0,
-                message = getApprovalMessage(score = score!!, maxScore = MAX_QUESTIONS * 10),
+                message = viewModel.getScoreMessage(),
                 onHome = { navController.navigate(Route.TitleScreen.route) },
                 onPlayAgain = {
                     scope.launch{

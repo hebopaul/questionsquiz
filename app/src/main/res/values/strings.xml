@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">QuizGame</string>
     <string name="play_again">Play Again</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="question_id_did_not_match_data">question id did not match data</string>
+    <string name="oops">oops</string>
+    <string name="yikes">yikes</string>
+    <string name="horrendous">horrendous</string>
+    <string name="approval_message10">Congratulations! You are a genius wizard!</string>
+    <string name="approval_message09">You are even smarter than this super original app!</string>
+    <string name="approval_message08">You docto yet? Talk to me after you docto!</string>
+    <string name="approval_message07">Wow, you be the very smart!</string>
+    <string name="approval_message05">Good job! I\'ve seen better…</string>
+    <string name="approval_message04">Nice! You\'re almost there!</string>
+    <string name="approval_message03">Okay! You can do better!</string>
+    <string name="approval_message02">You need to work hard!</string>
+    <string name="approval_message01">Congratulations! You have failed successfully!</string>
+    <string name="approval_message00">Congratulations! You are demoted to a monkey\'s assistant!</string>
+    <string name="new_game">New Game</string>
+    <string name="your_score_is">Your score is</string>
+    <string name="question">Question</string>
 </resources>

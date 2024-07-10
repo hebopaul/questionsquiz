@@ -1,14 +1,15 @@
 package com.example.quizgame.di
 
-import com.example.quizgame.Repository
+import android.content.Context
+import com.example.quizgame.Toolset
 import com.example.quizgame.api.QuestionsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 
@@ -34,5 +35,14 @@ class MainModule() {
     fun provideQuestionsApi(retrofit: Retrofit): QuestionsApi {
         return retrofit.create(QuestionsApi::class.java)
     }
+
+
+
+
+
+    @Provides
+    @Singleton
+    fun provideToolset(@ApplicationContext context: Context): Toolset = Toolset(context)
+
 
 }

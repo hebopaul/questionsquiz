@@ -27,18 +27,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.quizgame.R
 import com.example.quizgame.domain.model.Questions
 import com.example.quizgame.shuffleAnswers
 
 const val MAX_QUESTIONS = 10
+
 
 @Composable
 fun QuestionScreen(
     questions: Questions,
     questionId: String,
     onAnswerCorrect: () -> Unit,
-    onAnswerWrong: () -> Unit
+    onAnswerWrong: () -> Unit,
 ) {
     val question by remember { mutableStateOf(questions.getCurrentQuestion(questionId)) }
     val possibleAnswers by remember {
@@ -59,7 +62,7 @@ fun QuestionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Question ${question.questionNumber}/$MAX_QUESTIONS",
+                    text = stringResource(R.string.question)+" ${question.questionNumber}/$MAX_QUESTIONS",
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(10.dp)
                 )

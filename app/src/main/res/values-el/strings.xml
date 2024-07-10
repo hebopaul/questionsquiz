@@ -2,4 +2,22 @@
 <resources>
     <string name="app_name">Παιχνίδι Ερωτήσεων</string>
     <string name="play_again">Παίξε Ξανά</string>
+    <string name="something_went_wrong">Κάτι πήγε στραβά</string>
+    <string name="question_id_did_not_match_data">δεν βρέθηκε η ερώτηση</string>
+    <string name="oops">ουπς</string>
+    <string name="yikes">άουτς</string>
+    <string name="horrendous">λαλλαλα</string>
+    <string name="approval_message10">Συγχαρητήρια! Είσαι μια μαγευτική ιδιοφυία!</string>
+    <string name="approval_message09">Είσαι πιο έξυπνη/ος, ακόμα και από αυτή τη γ****η εφαρμογή!</string>
+    <string name="approval_message08">Ένα πράμα ήθελε η μάνα σου… να σε δει με πτυχίο!</string>
+    <string name="approval_message07">Είσαι πολύ έξυπνη/ος. Γεια σου τώρα.</string>
+    <string name="approval_message05">Οκ. Τα χουμε ξαναδεί…</string>
+    <string name="approval_message04">Νταξ, δε με πολυενδιαφέρει κιόλας.</string>
+    <string name="approval_message03">Μπορις το πολυ καλιτερο</string>
+    <string name="approval_message02">Ντουλεπσι βγαλι αη κιου, γιατι ντεν τσουλαη</string>
+    <string name="approval_message01">Ούγκα ούγκα!</string>
+    <string name="approval_message00">Πίσω στη ζούγκλα σου, αμέσως!</string>
+    <string name="new_game">Νέο Παιχνίδι</string>
+    <string name="your_score_is">Το σκορ σου είναι</string>
+    <string name="question">Ερώτηση</string>
 </resources>

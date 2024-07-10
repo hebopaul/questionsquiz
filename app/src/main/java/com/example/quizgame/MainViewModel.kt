@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val api: QuestionsApi
+    private val api: QuestionsApi,
+    private val tools: Toolset
 ): ViewModel() {
 
     val repository = Repository(api)
@@ -30,7 +31,6 @@ class MainViewModel @Inject constructor(
         private set
     var currentQuestion by mutableStateOf<SingleQuestion?>(null)
         private set
-    var isAnswerCorrect by mutableStateOf<Boolean?>(null)
 
 
     fun newGame(){
@@ -74,8 +74,11 @@ class MainViewModel @Inject constructor(
         newGame()
     }
 
+
+
+
     fun getScoreMessage(): String {
-       return getApprovalMessage(score, MAX_QUESTIONS*10)
+       return tools.getApprovalMessage(score, MAX_QUESTIONS*10)
     }
 
 }

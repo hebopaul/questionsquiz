@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.quizgame.R
@@ -39,7 +40,7 @@ fun TitleScreen(
             modifier = Modifier.size(height = 100.dp, width = 300.dp)
         ) {
             Text(
-                text = "New Game",
+                text = stringResource(R.string.new_game),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold
                 )

@@ -15,7 +15,7 @@ fun LoadingScreen() {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.secondary)
     ) {
-        CircularProgressIndicator(color = MaterialTheme.colorScheme.onSecondary)
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 
 }

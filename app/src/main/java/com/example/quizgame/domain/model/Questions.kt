@@ -1,6 +1,6 @@
 package com.example.quizgame.domain.model
 
-data class Questions(
+data class Questions (
     val list: List<SingleQuestion>?,
 ) {
 
@@ -16,9 +16,13 @@ data class Questions(
                 )
         }
         return SingleQuestion(
-            askQuestion = "Something went wrong",
-            correctAnswer = "question id did not match data",
-            wrongAnswers = listOf("oops", "yikes", "horrendous"),
+            askQuestion = "something went wrong",
+            correctAnswer = "dis bad",
+            wrongAnswers = listOf(
+                "oh",
+                "no",
+                "error"
+            ),
             questionNumber = 0
         )
     }
