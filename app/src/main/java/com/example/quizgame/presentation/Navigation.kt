@@ -16,6 +16,8 @@ fun Navigation(viewModel: MainViewModel) {
 
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
+    viewModel.getCategories()
+
     NavHost(
         navController = navController,
         startDestination = Route.TitleScreen.route
@@ -23,13 +25,7 @@ fun Navigation(viewModel: MainViewModel) {
         composable(route = Route.TitleScreen.route) {
             TitleScreen(
                 onNewGameClick = {
-                    viewModel.newGame()
-                    scope.launch {
-                        delay(2000)
-                        navController.navigate(
-                            "question_screen/" + viewModel.currentQuestion?.questionId
-                        )
-                    }
+                    navController.navigate(Route.OptionsScreen.route)
                 }
             )
         }
@@ -39,7 +35,7 @@ fun Navigation(viewModel: MainViewModel) {
             Log.d("Navigation", "questionId: $questionId")
 
             LaunchedEffect(key1 = viewModel.isGameOver) {
-                if (viewModel.isGameOver){
+                if (viewModel.isGameOver) {
                     navController.navigate(
                         "game_over_screen/" + viewModel.score
                     )
@@ -49,30 +45,30 @@ fun Navigation(viewModel: MainViewModel) {
             if (viewModel.questions == null) {
                 LoadingScreen()
             } else
-            QuestionScreen(
-                questions = viewModel.questions!!,
-                questionId = questionId ?: "0",
-                onAnswerWrong = {
-                    viewModel.answeredIncorrectly()
-                    Log.d("Navigation", "onAnswerWrong")
-                    scope.launch{
-                        delay(1500)
-                        navController.navigate(
-                            "question_screen/" + viewModel.currentQuestion?.questionId
-                        )
-                    }
-                },
-                onAnswerCorrect = {
-                    viewModel.answeredCorrectly()
-                    Log.d("Navigation", "onAnswerCorrect")
-                    scope.launch{
-                        delay(1500)
-                        navController.navigate(
-                            "question_screen/" + viewModel.currentQuestion?.questionId
-                        )
-                    }
-                },
-            )
+                QuestionScreen(
+                    questions = viewModel.questions!!,
+                    questionId = questionId ?: "0",
+                    onAnswerWrong = {
+                        viewModel.answeredIncorrectly()
+                        Log.d("Navigation", "onAnswerWrong")
+                        scope.launch {
+                            delay(1500)
+                            navController.navigate(
+                                "question_screen/" + viewModel.currentQuestion?.questionId
+                            )
+                        }
+                    },
+                    onAnswerCorrect = {
+                        viewModel.answeredCorrectly()
+                        Log.d("Navigation", "onAnswerCorrect")
+                        scope.launch {
+                            delay(1500)
+                            navController.navigate(
+                                "question_screen/" + viewModel.currentQuestion?.questionId
+                            )
+                        }
+                    },
+                )
 
         }
 
@@ -84,7 +80,7 @@ fun Navigation(viewModel: MainViewModel) {
                 message = viewModel.getScoreMessage(),
                 onHome = { navController.navigate(Route.TitleScreen.route) },
                 onPlayAgain = {
-                    scope.launch{
+                    scope.launch {
                         viewModel.playAgain()
                         delay(500)
                         navController.navigate(
@@ -94,6 +90,23 @@ fun Navigation(viewModel: MainViewModel) {
                 }
             )
         }
+
+        composable(route = Route.OptionsScreen.route) {
+            OptionsScreen(
+                listOfCategories = viewModel.categories,
+                onItemClicked = { viewModel.setOption(it) },
+                onContinueClicked = {
+                    scope.launch{
+                        viewModel.newGame()
+                        delay(2000)
+                        navController.navigate(
+                            "question_screen/" + viewModel.currentQuestion?.questionId
+                        )
+                    }
+                }
+            )
+
+        }
     }
 }
 
@@ -102,6 +115,6 @@ sealed class Route(val route: String) {
     object TitleScreen : Route("title_screen")
     object QuestionScreen : Route("question_screen/{questionId}")
     object GameOverScreen : Route("game_over_screen/{score}")
-
+    object OptionsScreen : Route("options_screen")
 }
 
