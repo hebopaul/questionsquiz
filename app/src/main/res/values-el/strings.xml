@@ -20,4 +20,7 @@
     <string name="new_game">Νέο Παιχνίδι</string>
     <string name="your_score_is">Το σκορ σου είναι</string>
     <string name="question">Ερώτηση</string>
+    <string name="select_a_category">Διάλεξε Κατηγορία</string>
+    <string name="select_difficulty">Διάλεξε Δυσκολία</string>
+    <string name="options">Επιλογες</string>
 </resources>
